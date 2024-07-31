@@ -20,9 +20,13 @@ with DAG(
     default_args={
         'depends_on_past':False,
         'email_on_failure': False,
+        'email_on_retry': False,
         'retries': 1,
-        'retry_delay': timedelta(seconds=3)
+        'retry_delay': timedelta(seconds=3),
     },
+
+    max_active_tasks= 3,
+    max_active_runs= 1,
     description='hello world DAG',
     # schedule_interval=timedelta(days=1),
     schedule="10 4 * * *",
@@ -128,6 +132,12 @@ with DAG(
 
     task_end = EmptyOperator(task_id='end', trigger_rule="all_done")
     task_start = EmptyOperator(task_id='start')
+    
+    multi_y = EmptyOperator(task_id='multi_y') #다양성 영화 유무
+    multi_n = EmptyOperator(task_id='multi_n') 
+    nation_k = EmptyOperator(task_id='nation_k') #한국/외국 영화
+    nation_f = EmptyOperator(task_id='nation_f')
+    
     task_join = BashOperator(
             task_id='join',
             bash_command="exit 1",
@@ -135,12 +145,12 @@ with DAG(
     )
     
     task_start >> branch_op >> rm_dir 
-    rm_dir >> task_get
+    rm_dir >> [task_get, multi_y, multi_n, nation_k, nation_f]
     task_start >> task_join >> task_save
     
-    branch_op >> task_get
+    branch_op >> [task_get, multi_y, multi_n, nation_k, nation_f]
     branch_op >> echo_task >> task_save
     
-    task_get >> task_save >> task_end
+    [task_get, multi_y, multi_n, nation_k, nation_f] >> task_save >> task_end
     
     
