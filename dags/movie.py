@@ -40,9 +40,9 @@ with DAG(
         df = save2df(ds_nodash)
         print(df.head(5))
 
-    def fun_multi_y(ds_nodash, arg):
+    def fun_multi_y(ds_nodash, url_param):
         from mov.api.call import save2df
-        df = save2df(load_dt=ds_nodash, url_param=arg)
+        df = save2df(load_dt=ds_nodash, url_param=url_param)
         
         print(df[['movieCd', 'movieNm']].head(5))
 
@@ -162,28 +162,28 @@ with DAG(
             python_callable=fun_multi_y,
             system_site_packages=False,
             requirements=["git+https://github.com/DONGUK777/mov.git@0.3/api"],
-            op_kwargs={ "arg" : {"multiMovieYn": "Y"}}
+            op_kwargs={ "url_param" : {"multiMovieYn": "Y"}}
         )
         multi_n = PythonVirtualenvOperator(
             task_id='multi_n',
             python_callable=fun_multi_y,
             system_site_packages=False,
             requirements=["git+https://github.com/DONGUK777/mov.git@0.3/api"],
-            op_kwargs={ "arg" : {"multiMovieYn": "N"}}
+            op_kwargs={ "url_param" : {"multiMovieYn": "N"}}
         ) 
         nation_k = PythonVirtualenvOperator(
             task_id='nation_k',
             python_callable=fun_multi_y,
             system_site_packages=False,
             requirements=["git+https://github.com/DONGUK777/mov.git@0.3/api"],
-            op_kwargs={ "arg" : {"repNationCd": "K"}}
+            op_kwargs={ "url_param" : {"repNationCd": "K"}}
         )
         nation_f = PythonVirtualenvOperator(
             task_id='nation_f',
             python_callable=fun_multi_y,
             system_site_packages=False,
             requirements=["git+https://github.com/DONGUK777/mov.git@0.3/api"],
-            op_kwargs={ "arg" : {"repNationCd": "F"}}
+            op_kwargs={ "url_param" : {"repNationCd": "F"}}
         )
     
     throw_err = BashOperator(
