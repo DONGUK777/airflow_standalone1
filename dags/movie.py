@@ -148,15 +148,15 @@ with DAG(
             trigger_rule="all_done"
     )
     
-
-    with TaskGroup('processing_tasks', dag=dag) as process_group:
-        task_get = PythonVirtualenvOperator(
+    task_get = PythonVirtualenvOperator(
             task_id='get_data',
             python_callable=get_data,
             requirements=["git+https://github.com/DONGUK777/mov.git@0.3/api"],
             system_site_packages=False,
             #venv_cache_path="/home/tommy/tmp/airflow_venv/get_data"
         )
+
+    with TaskGroup('processing_tasks', dag=dag) as process_group:
         multi_y = PythonVirtualenvOperator(
             task_id='multi.y',
             python_callable=fun_multi_y,
@@ -205,7 +205,7 @@ with DAG(
     branch_op >> get_start
     rm_dir >> get_start
     throw_err >> task_save
-    get_start >> process_group
+    get_start >> task_get >> process_group
     # get_start >> [task_get, multi_y, multi_n, nation_k, nation_f]
     process_group >> get_end >> task_save >> task_end
     # [task_get, multi_y, multi_n, nation_k, nation_f] >> get_end >> task_save >> task_end
