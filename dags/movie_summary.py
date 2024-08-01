@@ -32,7 +32,7 @@ with DAG(
     schedule="10 4 * * *",
     start_date=datetime(2024, 7, 24),
     catchup=True,
-    tags=['api', 'movie', 'ant'],
+    tags=['api', 'movie', 'summary'],
 
 ) as dag:
     
