@@ -205,7 +205,7 @@ with DAG(
     branch_op >> get_start
     rm_dir >> get_start
     throw_err >> task_save
-    get_start >> task_get >> process_group
+    get_start >> process_group
     # get_start >> [task_get, multi_y, multi_n, nation_k, nation_f]
     process_group >> get_end >> task_save >> task_end
     # [task_get, multi_y, multi_n, nation_k, nation_f] >> get_end >> task_save >> task_end
