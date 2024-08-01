@@ -35,10 +35,10 @@ with DAG(
     tags=['api', 'movie', 'ant'],
 ) as dag:
   # t1, t2 and t3 are examples of tasks created by instantiating operators
-    def get_data(ds_nodash):
-        from mov.api.call import save2df
-        df = save2df(ds_nodash)
-        print(df.head(5))
+##    def get_data(ds_nodash):
+#        from mov.api.call import save2df
+#        df = save2df(ds_nodash)
+#        print(df.head(5))
 
     def fun_multi_y(ds_nodash, url_param):
         from mov.api.call import save2df
@@ -148,13 +148,13 @@ with DAG(
             trigger_rule="all_done"
     )
     
-    task_get = PythonVirtualenvOperator(
-            task_id='get_data',
-            python_callable=get_data,
-            requirements=["git+https://github.com/DONGUK777/mov.git@0.3/api"],
-            system_site_packages=False,
-            #venv_cache_path="/home/tommy/tmp/airflow_venv/get_data"
-        )
+#    task_get = PythonVirtualenvOperator(
+#            task_id='get_data',
+#            python_callable=get_data,
+#            requirements=["git+https://github.com/DONGUK777/mov.git@0.3/api"],
+#            system_site_packages=False,
+#            #venv_cache_path="/home/tommy/tmp/airflow_venv/get_data"
+#        )
 
     with TaskGroup('processing_tasks', dag=dag) as process_group:
         multi_y = PythonVirtualenvOperator(
