@@ -63,16 +63,11 @@ with DAG(
         pp(params) # 여기는 task_name
         print("@" * 33)
 
-    def pro_data2(task_name, **params):
-        from pprint import pprint as pp
-        print("@" * 33)
-        print(task_name)
-        pp(params) # 여기는 task_name 없을 것으로 예상
-        if "task_name" in params.keys():
-            print("============== 있음")
-        else:
-            print("============== 없음")
-        print("@" * 33)
+    def pro_merge(task_name, **params):
+        load_dt = params['ds_nodash']
+        from mov_agg.u import merge
+        df = merge(load_dt)
+        print("*" * 33)
 
     def pro_data3(task_name):
         print("@" * 33)
@@ -97,7 +92,7 @@ with DAG(
             )
     merge_df = gen_vpython(
             id = "merge.df",
-            fun_obj = pro_data2,
+            fun_obj = pro_merge,
             op_kw = { "task_name": "merge_df!!!" }
             )
     de_dup = gen_vpython(
